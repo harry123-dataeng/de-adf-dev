@@ -1,0 +1,41 @@
+{
+	"name": "Salestransformation1",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "Salesinput"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          ORDERNUMBER as string,",
+				"          QUANTITYORDERED as string,",
+				"          PRICEEACH as string,",
+				"          ORDERLINENUMBER as string,",
+				"          SALES as string,",
+				"          ORDERDATE as string,",
+				"          STATUS as string,",
+				"          QTR_ID as string,",
+				"          MONTH_ID as string,",
+				"          YEAR_ID as string",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> Salesinput",
+				"Salesinput filter(SALES >= 2000) ~> filter1",
+				"filter1 aggregate(groupBy(YEAR_ID,",
+				"          MONTH_ID),",
+				"     Total_Sales = sum(SALES)) ~> aggregate1"
+			]
+		}
+	}
+}
